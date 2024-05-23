@@ -1,0 +1,174 @@
+﻿<Window x:Class="JProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="JProject" Height="550" Width="800" ResizeMode="NoResize" WindowStyle="ThreeDBorderWindow" FontFamily="Arial" Background="#FFC1C1C1" WindowStartupLocation="CenterScreen">
+    <!-- TabControl to host the pages -->
+
+    <Window.DataContext>
+        <Binding RelativeSource="{RelativeSource Self}"/>
+    </Window.DataContext>
+    <TabControl x:Name="tabControl" >
+        
+        <TabItem Header="Risc Detection" Background="#FFC1C1C1" Margin="0,-4,0,0" FontSize="18">
+            <Grid>
+
+                <DataGrid IsReadOnly="True" x:Name="OrderTaxGrid" Margin="34,0,34,0" Height="307" VerticalAlignment="Center">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
+                        <DataGridTextColumn Header="Shipping Price" Binding="{Binding ShippingPrice}"/>
+                        <DataGridTextColumn Header="Delivery Date" Binding="{Binding DeliveryDate}"/>
+                        <DataGridTextColumn Header="Comment" Binding="{Binding Comment}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <ComboBox x:Name="RecipientTax" ItemsSource="{Binding Recipients}"  SelectedIndex="0"  
+                          Margin="34,47,0,0" HorizontalAlignment="Left" Width="215" Height="26" VerticalAlignment="Top" SelectionChanged="TaxRecipientsChanged" />
+                <ComboBox x:Name="Quarter" SelectedIndex="0"  Margin="545,47,34,0" Height="26" VerticalAlignment="Top" SelectionChanged="TaxDateChanged"/>
+                <Label Content="Select Recipient" HorizontalAlignment="Left" Margin="30,16,0,0" VerticalAlignment="Top"/>
+                <Label Content="Select Quarter" HorizontalAlignment="Left" Margin="539,16,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="WarningMessage" Content="No issues has been found" HorizontalAlignment="Left" Margin="34,409,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="CategoryMessage" Content="" HorizontalAlignment="Left" Margin="34,440,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="TotalMessage" Content="" HorizontalAlignment="Right" Margin="0,409,34,0" VerticalAlignment="Top"/>
+
+
+            </Grid>
+        </TabItem>
+
+
+        <TabItem Header="Recipient" Background="#FFC1C1C1" Margin="0,-4,0,0" FontSize="18">
+            
+            <Grid>
+                <DataGrid IsReadOnly="True" x:Name="RecipientDataGrid" Margin="262,44,24,0" Height="374" VerticalAlignment="Top">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
+                        <DataGridTextColumn Header="Passport Number" Binding="{Binding PassportNumber}"/>
+                        <DataGridTextColumn Header="Personal Number" Binding="{Binding PersonalNumber}"/>
+                        <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Change" Click="ChangeRecipient" />
+                            <MenuItem Header="Delete" Click="DeleteRecipient" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Label Content="Add Recipient" HorizontalAlignment="Left" Margin="28,10,0,0" VerticalAlignment="Top" Width="213" Height="44" FontSize="30" FontWeight="Bold"/>
+                <Label Content="Name" HorizontalAlignment="Left" Margin="24,54,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="Name" HorizontalAlignment="Left" Margin="28,85,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="213"/>
+                <Label Content="Last Name" HorizontalAlignment="Left" Margin="24,108,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="LastName" HorizontalAlignment="Left" Margin="28,140,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="213"/>
+                <Label Content="Passport number" HorizontalAlignment="Left" Margin="24,164,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="PassportNumber" HorizontalAlignment="Left" Margin="28,195,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="213"/>
+                <Label Content="Personal number" HorizontalAlignment="Left" Margin="24,218,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="PersonalNumber" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left"
+                         Margin="28,250,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="213"/>
+                <Label Content="Phone" HorizontalAlignment="Left" Margin="24,273,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="Phone" HorizontalAlignment="Left" Margin="28,305,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="213"/>
+                <Button Content="Save" Margin="28,406,0,0" Click="saveRecipient" HorizontalAlignment="Left" Width="93" Height="24" VerticalAlignment="Top"/>
+                <Label Content="Selected Recipient " HorizontalAlignment="Left" Margin="24,333,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="SelectedRecipient" ItemsSource="{Binding Recipients}" SelectedItem="{Binding Recipient}"
+                          SelectedIndex="0"  Margin="28,369,0,0" HorizontalAlignment="Left" Width="215" Height="26" VerticalAlignment="Top" />
+                <Button Content="Update" Margin="148,406,0,0" Click="updateRecipient" HorizontalAlignment="Left" Width="93" Height="24" VerticalAlignment="Top"/>
+                
+            </Grid>
+        </TabItem>
+
+        
+        <TabItem Header="Order" Background="#FFC1C1C1" Margin="0,-4,0,0" FontSize="18">
+            
+            <Grid>
+
+                <DataGrid IsReadOnly="True" x:Name="OrderDataGrid" Margin="254,32,19,0" Height="431" VerticalAlignment="Top">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Recipient" Binding="{Binding RecipientName}"/>
+                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
+                        <DataGridTextColumn Header="Shipping Price" Binding="{Binding ShippingPrice}"/>
+                        <DataGridTextColumn Header="Delivery Date" Binding="{Binding DeliveryDate}"/>
+                        <DataGridTextColumn Header="Comment" Binding="{Binding Comment}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="DeleteOrder" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+
+                <Label Content="Add Order" HorizontalAlignment="Left" 
+                       Margin="26,10,0,0" VerticalAlignment="Top" Width="214" Height="44" FontSize="30" FontWeight="Bold"/>
+                <Label Content="Price" HorizontalAlignment="Left" Margin="16,56,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="Price" PreviewTextInput="DecimalValidationTextBox" HorizontalAlignment="Left" 
+                         Margin="20,87,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="214"/>
+                <Label Content="Shipping Price" HorizontalAlignment="Left" Margin="16,110,0,0" VerticalAlignment="Top"/>
+                <TextBox PreviewTextInput="DecimalValidationTextBox" x:Name="ShippingPrice" HorizontalAlignment="Left" 
+                         Margin="20,142,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="214"/>
+                <Label Content="Delivery Date" HorizontalAlignment="Left" Margin="16,166,0,0" VerticalAlignment="Top"/>
+                <DatePicker x:Name="DeliveryDate" HorizontalAlignment="Left" Margin="20,202,0,0" VerticalAlignment="Top" Width="214"/>
+                <Label Content="Comment" HorizontalAlignment="Left" Margin="20,361,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="Comment" HorizontalAlignment="Left" Margin="24,392,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="212"/>
+                <Label Content="Select Category" HorizontalAlignment="Left" Margin="16,237,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="CategoryList" ItemsSource="{Binding Categories}" SelectedItem="{Binding Category}" 
+                          SelectedIndex="0" Margin="20,271,0,0" HorizontalAlignment="Left" Width="214" Height="26" VerticalAlignment="Top" />
+                <Label Content="Select Recipient" HorizontalAlignment="Left" Margin="14,298,0,0" VerticalAlignment="Top"/>
+                <ComboBox x:Name="RecipientsList" ItemsSource="{Binding Recipients}" SelectedIndex="0" 
+                          HorizontalAlignment="Left" Margin="20,329,0,0" VerticalAlignment="Top" Width="214"/>
+
+                <Button Content="Add" HorizontalAlignment="Left" Margin="23,438,0,0" VerticalAlignment="Top" Click="AddOrder" Width="214"/>
+
+            </Grid>
+        </TabItem>
+
+        
+        <TabItem Header="Category" Background="#FFC1C1C1" Margin="0,-4,0,0" FontSize="18">
+            
+            
+            <Grid>
+                <Grid Margin="21,23,0,0" HorizontalAlignment="Left" Width="221" Height="142" VerticalAlignment="Top">
+                    <Label Content="Category Name" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Width="149" Margin="-4,47,0,0"/>
+                    <Button Content="Add Category" Click="AddCategory" FontSize="18" HorizontalAlignment="Left" Width="211" Height="25" VerticalAlignment="Bottom" Margin="0,0,0,3" />
+                    <TextBox  x:Name="categoryName" HorizontalAlignment="Left" Margin="0,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="211" Height="22"/>
+                    <Label Content="Add Category" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="30" Width="225" Margin="-4,0,0,0" Height="47" FontWeight="Bold"/>
+
+                </Grid>
+                <DataGrid IsReadOnly="True" x:Name="CategoryDataGrid" Margin="262,44,24,0" Height="374" VerticalAlignment="Top">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                        <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="DeleteCategory" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </Grid>
+            
+            
+        </TabItem>
+
+        
+        <TabItem Header="Settings" Background="#FFC1C1C1" Margin="0,-4,0,0" FontSize="18">
+            <Grid>
+
+                <Label Content="Settings" Margin="300,10,0,0" VerticalAlignment="Top" 
+                       Height="66" FontSize="48" FontWeight="Bold" HorizontalAlignment="Left" Width="202"/>
+                <Label x:Name="TaxLimitLabel" Content="Current Limit is " HorizontalAlignment="Left" Margin="290,92,0,0" VerticalAlignment="Top"/>
+                <Label x:Name="TaxRateLabel" Content="Current Tax Rate is " 
+                       HorizontalAlignment="Left" Margin="290,123,0,0" VerticalAlignment="Top"/>
+                <Label Content="Update Limit" HorizontalAlignment="Left" Margin="290,174,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="TotalLimit" PreviewTextInput="DecimalValidationTextBox" HorizontalAlignment="Left" 
+                         TextWrapping="Wrap"  VerticalAlignment="Top" Width="214" Margin="294,206,0,0"/>
+                <Label Content="Update Tax Rate" HorizontalAlignment="Left" Margin="290,234,0,0" VerticalAlignment="Top"/>
+                <TextBox x:Name="TaxRate" PreviewTextInput="DecimalValidationTextBox" 
+                         HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top" Width="214" Margin="294,266,0,0"/>
+                <Button Content="Update" HorizontalAlignment="Left" Margin="294,326,0,0" VerticalAlignment="Top" Width="214" Click="UpdateLimit"/>
+
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</Window>
